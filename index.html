@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Women’s Day Card 💌</title>
-  <meta name="description" content="An elegant open‑envelope card with falling petals." />
+  <meta name="description" content="An elegant open-envelope card with falling petals and a photo album." />
   <style>
     :root {
       --bg1: #fff7fb;
@@ -22,15 +22,17 @@
     body {
       font-family: 'Georgia', 'Times New Roman', serif;
       color: var(--ink);
-      background: radial-gradient(1200px 800px at 30% 10%, var(--bg1), transparent 50%),
-                  radial-gradient(1200px 800px at 70% 90%, var(--bg2), transparent 50%),
-                  linear-gradient(180deg, #fefeff, #fcfcff);
+      background:
+        radial-gradient(1200px 800px at 30% 10%, var(--bg1), transparent 50%),
+        radial-gradient(1200px 800px at 70% 90%, var(--bg2), transparent 50%),
+        linear-gradient(180deg, #fefeff, #fcfcff);
       overflow: hidden;
       display: grid;
       place-items: center;
       padding: 20px;
     }
 
+    /* petals */
     .petal {
       position: fixed; top: -10vh; width: 14px; height: 18px;
       background: radial-gradient(circle at 30% 30%, #fff, var(--accent));
@@ -48,12 +50,13 @@
       width: min(700px, 95vw);
       height: min(420px, 62vh);
       perspective: 1400px;
+      animation: sceneIn 1s ease both;
     }
+    @keyframes sceneIn { from { opacity: 0; transform: translateY(30px) scale(.94); } to { opacity: 1; transform: none; } }
 
-    /* Envelope container */
+    /* Envelope */
     .envelope-container {
-      position: absolute;
-      width: 100%; height: 100%;
+      position: absolute; inset: 0;
       transform-style: preserve-3d;
       transition: opacity 0.8s ease, transform 0.8s ease;
       cursor: pointer;
@@ -61,32 +64,30 @@
     .envelope-container.hidden { opacity: 0; pointer-events: none; transform: translateY(-100px) scale(0.8); }
 
     .envelope {
-      position: absolute;
-      width: 100%; height: 100%;
+      position: absolute; inset: 0;
       background: var(--envelope);
       border-radius: 8px;
       box-shadow: 0 20px 60px rgba(0,0,0,.2), 0 8px 20px rgba(0,0,0,.15);
       border: 1px solid var(--envelope-dark);
     }
 
-    /* Envelope flap */
     .envelope-flap {
-        position: absolute;
-        width: 100%; height: 56%; /* was 50% */
-        top: 0; left: 0;
-        background: linear-gradient(165deg, var(--envelope) 0%, var(--envelope-dark) 100%);
-        border-radius: 12px 12px 0 0;
-        transform-origin: top center;
-        transform-style: preserve-3d;
-        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 2px 8px rgba(0,0,0,.1);
-        border: 1px solid var(--envelope-dark);
-        border-bottom: none;
-        z-index: 2;
-        }
+      position: absolute;
+      width: 100%; height: 56%;
+      top: 0; left: 0;
+      background: linear-gradient(165deg, var(--envelope) 0%, var(--envelope-dark) 100%);
+      border-radius: 12px 12px 0 0;
+      transform-origin: top center;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 8px rgba(0,0,0,.1);
+      border: 1px solid var(--envelope-dark);
+      border-bottom: none;
+      z-index: 2;
+    }
     .envelope-container.opening .envelope-flap { transform: rotateX(-180deg); }
 
-    /* Triangle flap bottom */
+    /* bottom triangle piece (fixed-size borders) */
     .envelope-flap::before {
       content: '';
       position: absolute;
@@ -112,19 +113,55 @@
       transition: all 0.3s ease;
       z-index: 10;
     }
-    .envelope-container:not(.opening):hover .seal { transform: translate(-50%, -50%) scale(1.08) rotate(5deg); box-shadow: 0 12px 32px rgba(255, 114, 167, .5), 0 0 0 10px rgba(255,255,255,.6); }
+    .envelope-container:not(.opening):hover .seal {
+      transform: translate(-50%, -50%) scale(1.08) rotate(5deg);
+      box-shadow: 0 12px 32px rgba(255,114,167,.5), 0 0 0 10px rgba(255,255,255,.6);
+    }
     .seal::after { content: ''; position: absolute; bottom: -4px; width: 20px; height: 8px; background: inherit; border-radius: 0 0 50% 50%; filter: brightness(0.9); }
 
-    /* Letter container */
-    .letter-container { position: absolute; width: 100%; height: 100%; opacity: 0; transform: translateY(50px) scale(0.9); transition: opacity 0.8s ease 0.8s, transform 0.8s ease 0.8s; pointer-events: none; }
+    /* Letter */
+    .letter-container { position: absolute; inset: 0; opacity: 0; transform: translateY(50px) scale(0.9); transition: opacity 0.8s ease 0.8s, transform 0.8s ease 0.8s; pointer-events: none; }
     .letter-container.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
 
-    .letter { width: 100%; height: 100%; background: var(--paper); border-radius: 4px; box-shadow: 0 20px 60px rgba(0,0,0,.2), 0 8px 20px rgba(0,0,0,.15); border: 1px solid rgba(200, 190, 180, .3); padding: clamp(24px, 5vw, 48px); overflow-y: auto; animation: letterIn 0.6s ease both; -ms-overflow-style: none; scrollbar-width: none; overflow: hidden;}
+    .letter {
+      width: 100%; height: 100%;
+      background: var(--paper);
+      border-radius: 4px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2), 0 8px 20px rgba(0,0,0,.15);
+      border: 1px solid rgba(200, 190, 180, .3);
+      padding: clamp(24px, 5vw, 48px);
+      overflow-y: auto;
+      animation: letterIn 0.6s ease both;
+      -ms-overflow-style: none;       /* IE/Edge hide scrollbar */
+      scrollbar-width: none;          /* Firefox hide scrollbar */
+    }
+    .letter::-webkit-scrollbar { display: none; } /* Chrome/Safari hide scrollbar */
     @keyframes letterIn { from { transform: rotateY(-5deg); } to { transform: rotateY(0); } }
 
-    .content h1 { font-family: 'Georgia', serif; font-weight: 700; font-size: clamp(26px, 4.5vw, 38px); letter-spacing: 0.5px; line-height: 1.2; margin: 0 0 8px; background: linear-gradient(120deg, var(--accent) 0%, var(--accent-2) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; text-align: center; }
-    .content .subtitle { color: var(--sub); font-size: clamp(15px, 2.8vw, 18px); margin-bottom: 28px; text-align: center; font-style: italic; }
-    .content .divider { width: 60px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin: 24px auto; opacity: .4; }
+    .content h1 {
+      font-family: 'Georgia', serif;
+      font-weight: 700;
+      font-size: clamp(26px, 4.5vw, 38px);
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+      margin: 0 0 8px;
+      background: linear-gradient(120deg, var(--accent) 0%, var(--accent-2) 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      text-align: center;
+    }
+    .content .subtitle {
+      color: var(--sub);
+      font-size: clamp(15px, 2.8vw, 18px);
+      margin-bottom: 28px;
+      text-align: center;
+      font-style: italic;
+    }
+    .content .divider {
+      width: 60px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      margin: 24px auto;
+      opacity: .4;
+    }
     .content p { font-size: clamp(15px, 2.8vw, 17px); line-height: 1.85; margin: 0 0 18px; color: var(--ink); text-align: left; }
     .content .signature { margin-top: 32px; color: #667; font-style: italic; font-size: clamp(14px, 2.6vw, 16px); text-align: right; }
 
@@ -140,11 +177,26 @@
     .hand-icon { font-size: 22px; animation: tap 1.5s ease infinite; }
     @keyframes tap { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 
-    .scene { animation: sceneIn 1s ease both; }
-    @keyframes sceneIn { from { opacity: 0; transform: translateY(30px) scale(.94); } to { opacity: 1; transform: none; } }
-
-    /* Hide WebKit scrollbars completely */
-    .letter::-webkit-scrollbar { display: none; }
+    /* ===== Album (embedded slideshow) ===== */
+    .alb-overlay{position:fixed; inset:0; background:rgba(0,0,0,.55); backdrop-filter: blur(6px); display:none; align-items:center; justify-content:center; z-index:50}
+    .alb-overlay.show{display:flex}
+    .alb-stage{position:relative; width:min(1080px,96vw); height:min(640px,82vh); border-radius:22px; overflow:hidden; background:#000; box-shadow:0 18px 50px rgba(0,0,0,.5), 0 6px 18px rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.12)}
+    .alb-slide{position:absolute; inset:0; opacity:0; transition:opacity .8s ease}
+    .alb-slide.alb-active{opacity:1}
+    .alb-slide img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform:scale(1.06); animation:alb-ken 14s ease-in-out forwards}
+    @keyframes alb-ken{0%{transform:scale(1.06)}50%{transform:scale(1.12)}100%{transform:scale(1.06)}}
+    .alb-glass{position:absolute; left:0; right:0; bottom:0; padding:18px; background:linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.45)); color:#fff}
+    .alb-cap{max-width:min(90%,800px); font-size:clamp(14px,2.5vw,18px); line-height:1.6; text-shadow:0 2px 6px rgba(0,0,0,.55)}
+    .alb-ctrls{position:absolute; inset:0; display:flex; align-items:center; justify-content:space-between; padding:12px}
+    .alb-btn{appearance:none; background:rgba(255,255,255,.7); border:0; width:42px; height:42px; border-radius:50%; display:grid; place-items:center; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,.18)}
+    .alb-btn:hover{background:#fff}
+    .alb-btn svg{width:20px;height:20px}
+    .alb-topbar{position:absolute; left:0; right:0; top:0; padding:14px; display:flex; align-items:center; justify-content:space-between}
+    .alb-pill{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background:rgba(255,255,255,.7); border:1px solid rgba(255,255,255,.35); backdrop-filter: blur(8px); box-shadow:0 6px 18px rgba(0,0,0,.18)}
+    .alb-progress{position:absolute; left:16px; right:16px; bottom:16px; height:6px; border-radius:999px; background:rgba(255,255,255,.35); overflow:hidden}
+    .alb-bar{height:100%; width:0%; background:linear-gradient(90deg, var(--accent), var(--accent-2)); transition:width .2s linear}
+    .alb-close{position:absolute; top:10px; right:10px; background:rgba(255,255,255,.8); border:0; border-radius:10px; padding:8px 10px; font-weight:700; cursor:pointer}
+    .album-btn{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid rgba(120,150,190,.35); background:#fff; cursor:pointer; font-weight:600; box-shadow:0 6px 18px rgba(0,0,0,.06);}
   </style>
 </head>
 <body>
@@ -164,19 +216,46 @@
           <div class="corner corner-tl"></div>
           <div class="corner corner-tr"></div>
 
-          <h1>Happy Women’s Day</h1>
-          <div class="subtitle">For <span id="recipient">You</span> 🌷</div>
+          <h1>妇女节快乐</h1>
+          <div class="subtitle">为<span id="recipient">我特别的人</span> 🌷</div>
 
           <div class="divider"></div>
 
-          <p><strong>Hi,</strong></p>
-          <p>Wishing you a gentle and joy‑filled Women’s Day. May you smile often, feel cared for, and meet many good things today and on the days ahead.</p>
-          <p>You deserve every soft and warm thing this day brings. 🌸</p>
-          <p class="signature">— <span id="sender">Me</span></p>
+          <p>祝你度过一个温柔而充满喜悦的妇女节。愿你常常微笑，被温暖包围，并在今天和未来的每一天都遇见许多美好的事。</p>
+          <p>你值得拥有这一天带来的所有柔软与温馨。🌸</p>
+          <p>谢谢你一直在我身边，我真的很感激你。</p>
+
+          <p class="signature">— <span id="sender">—— 只属于你的人 💌</span></p>
+
+          <!-- Open Album button -->
+          <p><button class="album-btn" id="openAlbum">Open your album →</button></p>
 
           <div class="corner corner-bl"></div>
           <div class="corner corner-br"></div>
         </div>
+      </div>
+    </div>
+
+    <!-- Album overlay -->
+    <div class="alb-overlay" id="albumOverlay" aria-label="Photo slideshow" role="dialog" aria-modal="true">
+      <div class="alb-stage" id="albStage">
+        <button class="alb-close" id="closeAlbum">✕ Close</button>
+
+        <div class="alb-ctrls">
+          <button class="alb-btn" id="albPrev" aria-label="Previous">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="alb-btn" id="albNext" aria-label="Next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+
+        <div class="alb-topbar">
+          <div class="alb-pill">Your Album 🌷</div>
+          <div class="alb-pill" id="albPlay">⏸ Pause</div>
+        </div>
+
+        <div class="alb-progress"><div class="alb-bar" id="albBar"></div></div>
       </div>
     </div>
 
@@ -187,13 +266,14 @@
   </div>
 
   <script>
+    // ------- Personalization via URL ?to=&from= -------
     const params = new URLSearchParams(location.search);
-    const r = (params.get('to') || 'You').trim();
+    const r = (params.get('to') || '我特别的人').trim();
     const s = (params.get('from') || 'Me').trim();
-
     document.getElementById('recipient').textContent = r;
     document.getElementById('sender').textContent = s;
 
+    // ------- Envelope open -------
     const envelopeContainer = document.getElementById('envelopeContainer');
     const letterContainer = document.getElementById('letterContainer');
     const promptText = document.getElementById('promptText');
@@ -211,7 +291,7 @@
       }
     });
 
-    // Generate petals
+    // ------- Petals on page -------
     const PETALS = 20;
     for (let i = 0; i < PETALS; i++) {
       const p = document.createElement('div');
@@ -223,6 +303,80 @@
       p.style.opacity = (0.3 + Math.random() * 0.4).toFixed(2);
       document.body.appendChild(p);
     }
+
+    // ===== Embedded Album (slideshow overlay) =====
+    (function(){
+      const openBtn = document.getElementById('openAlbum');
+      const overlay = document.getElementById('albumOverlay');
+      const stage = document.getElementById('albStage');
+      const prevBtn = document.getElementById('albPrev');
+      const nextBtn = document.getElementById('albNext');
+      const playBtn = document.getElementById('albPlay');
+      const bar = document.getElementById('albBar');
+      const closeBtn = document.getElementById('closeAlbum');
+
+      // ==== Your photos here ====
+      const SLIDES = [
+        { src: './img/001.jpg', caption: 'The smile that stuck with me' },
+        { src: './img/002.jpg', caption: 'A quiet, golden moment' },
+        { src: './img/003.jpg', caption: 'Always glowing' },
+      ];
+      const DURATION = 4500;
+
+      // Build slides once
+      const slides = SLIDES.map((s,i)=>{
+        const d = document.createElement('div'); d.className='alb-slide';
+        d.setAttribute('role','group'); d.setAttribute('aria-label',`${i+1} of ${SLIDES.length}`);
+        const img = new Image(); img.src = s.src; img.alt = s.caption || `Photo ${i+1}`; d.appendChild(img);
+        const glass = document.createElement('div'); glass.className='alb-glass';
+        const cap = document.createElement('div'); cap.className='alb-cap'; cap.textContent = s.caption || '';
+        glass.appendChild(cap); d.appendChild(glass);
+        stage.appendChild(d);
+        return d;
+      });
+
+      let idx=0, timer=null, prog=null, playing=true;
+
+      function show(n){ slides[idx]?.classList.remove('alb-active'); idx=(n+slides.length)%slides.length; slides[idx].classList.add('alb-active'); reset(); }
+      function next(){ show(idx+1); }
+      function prev(){ show(idx-1); }
+      function play(){ playing=true; playBtn.textContent='⏸ Pause'; timer=setInterval(next, DURATION); animate(); }
+      function pause(){ playing=false; playBtn.textContent='▶ Play'; clearInterval(timer); timer=null; stop(); }
+      function toggle(){ playing?pause():play(); }
+
+      function reset(){ bar.style.width='0%'; }
+      function animate(){ stop(); let w=0; prog=setInterval(()=>{ w += 100*200/DURATION; bar.style.width=Math.min(100,w)+'%'; if(w>=100) reset(); }, 200); }
+      function stop(){ clearInterval(prog); prog=null; bar.style.width='0%'; }
+
+      prevBtn.addEventListener('click', ()=>{ pause(); prev(); });
+      nextBtn.addEventListener('click', ()=>{ pause(); next(); });
+      playBtn.addEventListener('click', toggle);
+
+      // Open/close overlay
+      openBtn?.addEventListener('click', ()=>{
+        overlay.classList.add('show');
+        document.body.style.overflow='hidden';
+        slides[0].classList.add('alb-active');
+        play();
+      });
+
+      function close(){
+        overlay.classList.remove('show');
+        document.body.style.overflow='';
+        pause();
+      }
+      closeBtn.addEventListener('click', close);
+      overlay.addEventListener('click', (e)=>{ if(e.target===overlay) close(); });
+
+      // Keyboard while open
+      window.addEventListener('keydown', (e)=>{
+        if(!overlay.classList.contains('show')) return;
+        if(e.key==='Escape') close();
+        if(e.key==='ArrowRight'){ pause(); next(); }
+        if(e.key==='ArrowLeft'){ pause(); prev(); }
+        if(e.key===' '){ e.preventDefault(); toggle(); }
+      });
+    })();
   </script>
 </body>
 </html>
