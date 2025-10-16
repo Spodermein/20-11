@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Women’s Day Card 💌</title>
+  <meta name="description" content="An elegant open‑envelope card with falling petals." />
+  <style>
+    :root {
+      --bg1: #fff7fb;
+      --bg2: #f7fcff;
+      --ink: #2d3748;
+      --sub: #546;
+      --accent: #ff72a7;
+      --accent-2: #8ec5ff;
+      --paper: #fffefb;
+      --envelope: #fef5f8;
+      --envelope-dark: #fde5ec;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      color: var(--ink);
+      background: radial-gradient(1200px 800px at 30% 10%, var(--bg1), transparent 50%),
+                  radial-gradient(1200px 800px at 70% 90%, var(--bg2), transparent 50%),
+                  linear-gradient(180deg, #fefeff, #fcfcff);
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    .petal {
+      position: fixed; top: -10vh; width: 14px; height: 18px;
+      background: radial-gradient(circle at 30% 30%, #fff, var(--accent));
+      border-radius: 70% 70% 80% 20% / 70% 70% 30% 40%;
+      opacity: .5; filter: drop-shadow(0 2px 3px rgba(0,0,0,.1));
+      animation: fall linear infinite; pointer-events: none;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-10vh) translateX(0) rotate(0deg); }
+      100% { transform: translateY(120vh) translateX(var(--drift)) rotate(360deg); }
+    }
+
+    .scene {
+      position: relative;
+      width: min(700px, 95vw);
+      height: min(420px, 62vh);
+      perspective: 1400px;
+    }
+
+    /* Envelope container */
+    .envelope-container {
+      position: absolute;
+      width: 100%; height: 100%;
+      transform-style: preserve-3d;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      cursor: pointer;
+    }
+    .envelope-container.hidden { opacity: 0; pointer-events: none; transform: translateY(-100px) scale(0.8); }
+
+    .envelope {
+      position: absolute;
+      width: 100%; height: 100%;
+      background: var(--envelope);
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2), 0 8px 20px rgba(0,0,0,.15);
+      border: 1px solid var(--envelope-dark);
+    }
+
+    /* Envelope flap */
+    .envelope-flap {
+        position: absolute;
+        width: 100%; height: 56%; /* was 50% */
+        top: 0; left: 0;
+        background: linear-gradient(165deg, var(--envelope) 0%, var(--envelope-dark) 100%);
+        border-radius: 12px 12px 0 0;
+        transform-origin: top center;
+        transform-style: preserve-3d;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 8px rgba(0,0,0,.1);
+        border: 1px solid var(--envelope-dark);
+        border-bottom: none;
+        z-index: 2;
+        }
+    .envelope-container.opening .envelope-flap { transform: rotateX(-180deg); }
+
+    /* Triangle flap bottom */
+    .envelope-flap::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%) translateY(99%);
+      width: 0; height: 0;
+      border-left: 300px solid transparent;
+      border-right: 300px solid transparent;
+      border-top: 120px solid var(--envelope);
+    }
+
+    /* Wax seal */
+    .seal {
+      position: absolute;
+      top: 48%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px;
+      box-shadow: 0 8px 24px rgba(255, 114, 167, .4), 0 0 0 8px rgba(255,255,255,.5);
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    .envelope-container:not(.opening):hover .seal { transform: translate(-50%, -50%) scale(1.08) rotate(5deg); box-shadow: 0 12px 32px rgba(255, 114, 167, .5), 0 0 0 10px rgba(255,255,255,.6); }
+    .seal::after { content: ''; position: absolute; bottom: -4px; width: 20px; height: 8px; background: inherit; border-radius: 0 0 50% 50%; filter: brightness(0.9); }
+
+    /* Letter container */
+    .letter-container { position: absolute; width: 100%; height: 100%; opacity: 0; transform: translateY(50px) scale(0.9); transition: opacity 0.8s ease 0.8s, transform 0.8s ease 0.8s; pointer-events: none; }
+    .letter-container.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+    .letter { width: 100%; height: 100%; background: var(--paper); border-radius: 4px; box-shadow: 0 20px 60px rgba(0,0,0,.2), 0 8px 20px rgba(0,0,0,.15); border: 1px solid rgba(200, 190, 180, .3); padding: clamp(24px, 5vw, 48px); overflow-y: auto; animation: letterIn 0.6s ease both; -ms-overflow-style: none; scrollbar-width: none; overflow: hidden;}
+    @keyframes letterIn { from { transform: rotateY(-5deg); } to { transform: rotateY(0); } }
+
+    .content h1 { font-family: 'Georgia', serif; font-weight: 700; font-size: clamp(26px, 4.5vw, 38px); letter-spacing: 0.5px; line-height: 1.2; margin: 0 0 8px; background: linear-gradient(120deg, var(--accent) 0%, var(--accent-2) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; text-align: center; }
+    .content .subtitle { color: var(--sub); font-size: clamp(15px, 2.8vw, 18px); margin-bottom: 28px; text-align: center; font-style: italic; }
+    .content .divider { width: 60px; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin: 24px auto; opacity: .4; }
+    .content p { font-size: clamp(15px, 2.8vw, 17px); line-height: 1.85; margin: 0 0 18px; color: var(--ink); text-align: left; }
+    .content .signature { margin-top: 32px; color: #667; font-style: italic; font-size: clamp(14px, 2.6vw, 16px); text-align: right; }
+
+    .corner { position: absolute; width: 40px; height: 40px; opacity: .15; }
+    .corner-tl { top: 16px; left: 16px; border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); }
+    .corner-tr { top: 16px; right: 16px; border-top: 2px solid var(--accent-2); border-right: 2px solid var(--accent-2); }
+    .corner-bl { bottom: 16px; left: 16px; border-bottom: 2px solid var(--accent); border-left: 2px solid var(--accent); }
+    .corner-br { bottom: 16px; right: 16px; border-bottom: 2px solid var(--accent-2); border-right: 2px solid var(--accent-2); }
+
+    .prompt-text { position: absolute; bottom: -70px; left: 50%; transform: translateX(-50%); font-family: ui-sans-serif, system-ui, sans-serif; font-size: 15px; color: var(--sub); opacity: 0; animation: fadeInPrompt 1.2s ease 1.2s forwards; text-align: center; pointer-events: none; display: flex; align-items: center; gap: 8px; }
+    .prompt-text.hidden { display: none; }
+    @keyframes fadeInPrompt { to { opacity: .75; } }
+    .hand-icon { font-size: 22px; animation: tap 1.5s ease infinite; }
+    @keyframes tap { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+    .scene { animation: sceneIn 1s ease both; }
+    @keyframes sceneIn { from { opacity: 0; transform: translateY(30px) scale(.94); } to { opacity: 1; transform: none; } }
+
+    /* Hide WebKit scrollbars completely */
+    .letter::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <!-- Envelope -->
+    <div class="envelope-container" id="envelopeContainer">
+      <div class="envelope">
+        <div class="envelope-flap"></div>
+        <div class="seal">💌</div>
+      </div>
+    </div>
+
+    <!-- Letter (hidden initially) -->
+    <div class="letter-container" id="letterContainer">
+      <div class="letter">
+        <div class="content">
+          <div class="corner corner-tl"></div>
+          <div class="corner corner-tr"></div>
+
+          <h1>Happy Women’s Day</h1>
+          <div class="subtitle">For <span id="recipient">You</span> 🌷</div>
+
+          <div class="divider"></div>
+
+          <p><strong>Hi,</strong></p>
+          <p>Wishing you a gentle and joy‑filled Women’s Day. May you smile often, feel cared for, and meet many good things today and on the days ahead.</p>
+          <p>You deserve every soft and warm thing this day brings. 🌸</p>
+          <p class="signature">— <span id="sender">Me</span></p>
+
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prompt-text" id="promptText">
+      <span class="hand-icon">👆</span>
+      <span>Tap the envelope to open</span>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const r = (params.get('to') || 'You').trim();
+    const s = (params.get('from') || 'Me').trim();
+
+    document.getElementById('recipient').textContent = r;
+    document.getElementById('sender').textContent = s;
+
+    const envelopeContainer = document.getElementById('envelopeContainer');
+    const letterContainer = document.getElementById('letterContainer');
+    const promptText = document.getElementById('promptText');
+    let isOpening = false;
+
+    envelopeContainer.addEventListener('click', () => {
+      if (!isOpening) {
+        isOpening = true;
+        envelopeContainer.classList.add('opening');
+        promptText.classList.add('hidden');
+        setTimeout(() => {
+          envelopeContainer.classList.add('hidden');
+          letterContainer.classList.add('visible');
+        }, 800);
+      }
+    });
+
+    // Generate petals
+    const PETALS = 20;
+    for (let i = 0; i < PETALS; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.animationDuration = (12 + Math.random() * 12) + 's';
+      p.style.animationDelay = (Math.random() * -12) + 's';
+      p.style.setProperty('--drift', (Math.random() * 50 - 25) + 'vw');
+      p.style.opacity = (0.3 + Math.random() * 0.4).toFixed(2);
+      document.body.appendChild(p);
+    }
+  </script>
+</body>
+</html>
